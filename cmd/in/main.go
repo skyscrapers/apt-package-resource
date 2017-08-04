@@ -1,0 +1,34 @@
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+)
+
+func main() {
+	bytes, _ := ioutil.ReadAll(os.Stdin)
+	concourseInput := string(bytes)
+	fmt.Println(concourseInput)
+	// config := mirror.NewConfig()
+	// md, err := toml.DecodeFile(*configPath, config)
+	// if err != nil {
+	// 	log.ErrorExit(err)
+	// }
+	// if len(md.Undecoded()) > 0 {
+	// 	log.Error("invalid config keys", map[string]interface{}{
+	// 		"keys": fmt.Sprintf("%#v", md.Undecoded()),
+	// 	})
+	// 	os.Exit(1)
+	// }
+
+	// err = config.Log.Apply()
+	// if err != nil {
+	// 	log.ErrorExit(err)
+	// }
+
+	// err = mirror.Run(config, flag.Args())
+	// if err != nil {
+	// 	log.ErrorExit(err)
+	// }
+}
