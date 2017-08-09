@@ -17,3 +17,6 @@ tags
 # Archives
 pkg/
 *.tgz
+
+# Go Package Management
+vendor/

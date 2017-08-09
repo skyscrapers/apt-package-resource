@@ -1,46 +1,27 @@
-GOOS       ?= $(shell go env GOOS)
-GOARCH     ?= $(shell go env GOARCH)
-export XC_OS = $(GOOS)
-export XC_ARCH = $(GOARCH)
+GOVERSION=$(shell go version | awk '{print $$3;}')
+VERSION=$(shell git describe --tags | sed 's@^v@@' | sed 's@-@+@g')
+TESTS?=
+BINPATH?=$(GOPATH)/bin
 
-SUFFIX     := $(GOOS)_$(GOARCH)
+all: test check install
 
-# When the tag name is not available, use the commit hash
-#TRAVIS_TAG ?= $(shell git rev-parse --short HEAD)
+prepare:
+	go get -u github.com/mattn/goveralls
+	go get -u github.com/axw/gocov/gocov
+	go get -u golang.org/x/tools/cmd/cover
+	go get -u github.com/alecthomas/gometalinter
+	gometalinter --install
 
-CMD        := $(notdir $(wildcard cmd/*))
-# ARCHVIE    := $(addsuffix _$(TRAVIS_TAG)_$(SUFFIX).tgz,$(CMD))
+check:
+	gometalinter --config=linter.json ./...
 
-GO_PKGS    := \
-	github.com/golang/lint/golint \
-	github.com/mitchellh/gox
-
-
-default: test
+install:
+	go install -v -ldflags "-X main.Version=$(VERSION)"
 
 test:
-	go install ./...
-	go test -v ./...
-	go vet -x ./...
-	${GOPATH}/bin/golint -set_exit_status ./...
+	go test -v `go list ./... | grep -v vendor/` -gocheck.v=true
 
-# archive: $(ARCHVIE)
+version:
+	@echo $(VERSION)
 
-bin: $(patsubst %,pkg/%_$(SUFFIX),$(CMD))
-
-pkg/%_$(SUFFIX): cmd/%
-	CGO_ENABLED=0 ./scripts/build.sh $*
-
-# %_$(TRAVIS_TAG)_$(SUFFIX).tgz: pkg/%_$(SUFFIX)
-# 	cp cmd/$*/*.toml cmd/$*/USAGE.md LICENSE $<
-# 	tar -c -z -C pkg/ -f $@ $(notdir $<)
-
-clean:
-	rm -rf pkg/ *.tgz
-
-bootstrap:
-	go get -u ./...
-	go get $(GO_PKGS)
-
-# .PHONY: test archive bin clean bootstrap
-.PHONY: test clean bootstrap
+.PHONY: coverage.out version
