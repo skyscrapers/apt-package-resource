@@ -1,0 +1,38 @@
+{
+	"AppName": "apt-package-resource",
+	"ArtifactsDest": "xc-out/",
+	"TasksExclude": [
+		"rmbin",
+		"go-test",
+		"go-vet"
+	],
+    "TasksAppend": [
+    ],
+    "TaskSettings": {
+        "debs": {
+            "metadata": {
+                "maintainer": "Ringo De Smet",
+                "maintainer-email": "ringo@skyscrapers.eu",
+                "description": "Concourse APT Package Resource Type"
+            },
+            "metadata-deb": {
+                "License": "MIT",
+                "Homepage": "https://github.com/skyscrapers/",
+                "Depends": "bzip2, xz-utils, gnupg, gpgv"
+            },
+            "other-mapped-files": {
+                "/": "root/"
+            }
+        }
+    },
+	"ResourcesInclude": "README.md,LICENSE",
+	"Arch": "amd64",
+	"Os": "linux darwin",
+	"MainDirsExclude": "_man,vendor",
+	"BuildSettings": {
+		"LdFlagsXVars": {
+			"Version": "main.Version"
+		}
+	},
+	"ConfigVersion": "0.9"
+}

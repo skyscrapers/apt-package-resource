@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+exec 3>&1 # make stdout available as fd 3 for the result
+exec 1>&2 # redirect all output to stderr for logging
+
+# Read inputs
+payload=$(mktemp "$TMPDIR/apt-package-resource-request.XXXXXX")
+cat > "$payload" <&0
+
+# Parse parameters
+repo_uri=$(jq -r '.source.repo_uri // ""' < "$payload")
+component=$(jq -r '.source.component // "main"' < "$payload")
+distribution=$(jq -r '.source.distribution // ""' < "$payload")
+architecture=$(jq -r '.source.architecture // "amd64"' < "$payload")
+package=$(jq -r '.source.package // ""' < "$payload")
+gpg_key_id=$(jq -r '.source.gpg_key_id // ""' < "$payload")
+version=$(jq -r '.version.ref // "latest"' < "$payload")
+
+if ! aptly mirror show "${package}-mirror" > /dev/null ; then
+    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv "${gpg_key_id}" > /dev/null 2>&1
+    aptly mirror create -filter="$package" -architectures="${architecture}" "${package}-mirror" "${repo_uri}" "${distribution}" "${component}" > /dev/null
+fi
+aptly mirror update "${package}-mirror" > /dev/null
+./xc-out/snapshot/darwin_amd64/apt-package-resource check "${package}" "${version}"

@@ -5,6 +5,9 @@ BINPATH?=$(GOPATH)/bin
 
 all: test check install
 
+dev:
+	go get -u github.com/laher/goxc
+
 prepare:
 	go get -u github.com/mattn/goveralls
 	go get -u github.com/axw/gocov/gocov
@@ -20,6 +23,11 @@ install:
 
 test:
 	go test -v `go list ./... | grep -v vendor/` -gocheck.v=true
+
+goxc:
+	rm -rf root/
+	mkdir -p root/opt/concourse
+	goxc -pv=$(VERSION) -max-processors=4 $(GOXC_OPTS)
 
 version:
 	@echo $(VERSION)

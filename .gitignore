@@ -18,5 +18,7 @@ tags
 pkg/
 *.tgz
 
-# Go Package Management
+# Build setup
 vendor/
+xc-out/
+root/
