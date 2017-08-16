@@ -20,8 +20,8 @@ gpg_key_id=$(jq -r '.source.gpg_key_id // ""' < "$payload")
 version=$(jq -r '.version.ref // "latest"' < "$payload")
 
 if ! aptly mirror show "${package}-mirror" > /dev/null ; then
-    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv "${gpg_key_id}" > /dev/null 2>&1
+    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv "${gpg_key_id}" 1>&- 2>&-
     aptly mirror create -filter="$package" -architectures="${architecture}" "${package}-mirror" "${repo_uri}" "${distribution}" "${component}" > /dev/null
 fi
-aptly mirror update "${package}-mirror" > /dev/null
+aptly mirror update "${package}-mirror" 1>&- 2>&-
 ./xc-out/snapshot/darwin_amd64/apt-package-resource check "${package}" "${version}"
