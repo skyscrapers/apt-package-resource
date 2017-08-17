@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: "debian", tag: "latest"}
+
+inputs:
+- name: apt-package-resource
+
+# outputs:
+# - name: build-marketplace-api
+
+params:
+  INPUT: apt-package-resource
+#   OUTPUT: build-marketplace-api
+
+run:
+  path: sh
+  args:
+    - -exec
+    - |
+      cd $INPUT
+      make
