@@ -22,8 +22,10 @@ run:
   args:
     - -exec
     - |
-      export GOPATH=`pwd`
+      CURRENT=`pwd`
+      export PATH="${PATH}:${CURRENT}/bin"
+      export GOPATH="${CURRENT}:${CURRENT}/${INPUT}"
       go get -u github.com/golang/dep/cmd/dep
       cd $INPUT
-      $GOPATH/bin/dep ensure
+      dep ensure
       make
