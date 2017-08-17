@@ -20,4 +20,7 @@ echo "pwd is: " $PWD
 cd src/github.com/skyscrapers/apt-package-resource
 ls -lat
 
+go get -u github.com/golang/dep/cmd/dep
+${GOPATH}/bin/dep ensure
+
 make
