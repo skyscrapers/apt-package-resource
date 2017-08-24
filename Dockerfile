@@ -5,6 +5,7 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 9E3
     apt-get install -y aptly && \
     rm -rf /var/lib/apt/lists/*
 
-ADD scripts/check /opt/concourse
-ADD scripts/in /opt/concourse
-ADD scripts/out /opt/concourse
+COPY check /opt/concourse/
+COPY in /opt/concourse/
+COPY out /opt/concourse/
+COPY apt-package-resource /opt/concourse/
