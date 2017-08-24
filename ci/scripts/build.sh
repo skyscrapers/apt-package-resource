@@ -2,6 +2,8 @@
 
 set -e -x
 
+BASE=$PWD
+
 # The code is located in /apt-package-resource
 echo "pwd is: " $PWD
 echo "List whats in the current directory"
@@ -27,5 +29,5 @@ ${GOPATH}/bin/dep ensure
 make prepare
 make
 
-cp $GOPATH/bin/apt-package-resource ./apt-package-resource-docker
-cp scripts/{check,in,out} ./apt-package-resource-docker
+cp $GOPATH/bin/apt-package-resource $BASE/apt-package-resource-docker
+cp scripts/{check,in,out} $BASE/apt-package-resource-docker
