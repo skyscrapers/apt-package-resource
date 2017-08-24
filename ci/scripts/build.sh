@@ -9,6 +9,7 @@ ls -lat
 
 # Setup the gopath based on current directory.
 export GOPATH=$PWD
+export PATH=$GOPATH/bin:$PATH
 
 # Now we must move our code from the current directory ./apt-package-resource to $GOPATH/src/github.com/skyscrapers/apt-package-resource
 mkdir -p src/github.com/skyscrapers/
