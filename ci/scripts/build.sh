@@ -26,3 +26,6 @@ ${GOPATH}/bin/dep ensure
 
 make prepare
 make
+
+cp $GOPATH/bin/apt-package-resource ./apt-package-resource-docker
+cp scripts/{check,in,out} ./apt-package-resource-docker

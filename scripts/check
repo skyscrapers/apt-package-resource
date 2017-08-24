@@ -24,4 +24,4 @@ if ! aptly mirror show "${package}-mirror" > /dev/null ; then
     aptly mirror create -filter="$package" -architectures="${architecture}" "${package}-mirror" "${repo_uri}" "${distribution}" "${component}" > /dev/null
 fi
 aptly mirror update "${package}-mirror" 1>&- 2>&-
-./xc-out/snapshot/darwin_amd64/apt-package-resource check "${package}" "${version}"
+/opt/concourse/apt-package-resource check "${package}" "${version}"

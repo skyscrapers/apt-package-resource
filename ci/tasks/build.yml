@@ -10,8 +10,12 @@ image_resource:
 inputs:
 - name: apt-package-resource
 
+outputs:
+- name: apt-package-resource-docker
+
 params:
   INPUT: apt-package-resource
+  OUTPUT: apt-package-resource-docker
 
 run:
   path: ./apt-package-resource/ci/scripts/build.sh
