@@ -31,3 +31,4 @@ make
 
 cp $GOPATH/bin/apt-package-resource $BASE/apt-package-resource-docker
 cp scripts/{check,in,out} $BASE/apt-package-resource-docker
+cp Dockerfile $BASE/apt-package-resource-docker
