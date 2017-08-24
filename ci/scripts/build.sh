@@ -23,4 +23,5 @@ ls -lat
 go get -u github.com/golang/dep/cmd/dep
 ${GOPATH}/bin/dep ensure
 
+make prepare
 make
