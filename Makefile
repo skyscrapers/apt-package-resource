@@ -22,7 +22,7 @@ install:
 	go install -v -ldflags "-X main.Version=$(VERSION)"
 
 test:
-	go test -v `go list ./... | grep -v vendor/` -gocheck.v=true
+	go test -v `go list ./... | grep -v vendor/`
 
 goxc:
 	rm -rf root/

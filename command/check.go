@@ -3,6 +3,7 @@ package command
 import (
 	"fmt"
 	"sort"
+	"strings"
 
 	cli "github.com/smira/aptly/cmd"
 	"github.com/smira/aptly/deb"
@@ -68,10 +69,17 @@ func aptResourceCheck(cmd *commander.Command, args []string) error {
 	}
 
 	sort.Sort(ByVersion(versions))
-	matchingVersions := Filter(versions, SameOrHigher(args[1]))
+	matchingVersions := Filter(versions, SameOrHigher(getVersionToCompare(args[1], versions)))
 	printCheckJSON(matchingVersions)
 
 	return err
+}
+
+func getVersionToCompare(givenVersion string, foundVersions []string) string {
+	if strings.Compare(givenVersion, "latest") == 0 {
+		return foundVersions[len(foundVersions)-1]
+	}
+	return givenVersion
 }
 
 // printCheckJson prints the list of versions in a format Concourse expects as output

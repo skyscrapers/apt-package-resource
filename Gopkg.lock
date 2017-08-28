@@ -32,6 +32,12 @@
   version = "v1.0.10"
 
 [[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
+  version = "v1.1.0"
+
+[[projects]]
   name = "github.com/gin-gonic/gin"
   packages = [".","binding","render"]
   revision = "b1758d3bfa09e61ddbc1c9a627e936eec6a170de"
@@ -109,6 +115,12 @@
   version = "v0.8.0"
 
 [[projects]]
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
   branch = "expose-context"
   name = "github.com/smira/aptly"
   packages = ["api","aptly","cmd","console","context","database","deb","files","http","pgp","query","s3","swift","systemd/activation","utils"]
@@ -158,6 +170,12 @@
   revision = "7f0af6269940baa2c938fabe73e0d7ba41205683"
 
 [[projects]]
+  name = "github.com/stretchr/testify"
+  packages = ["assert"]
+  revision = "69483b4bd14f5845b5a1e55bca19e954e827f1d0"
+  version = "v1.1.4"
+
+[[projects]]
   branch = "master"
   name = "github.com/syndtr/goleveldb"
   packages = ["leveldb","leveldb/cache","leveldb/comparer","leveldb/errors","leveldb/filter","leveldb/iterator","leveldb/journal","leveldb/memdb","leveldb/opt","leveldb/storage","leveldb/table","leveldb/util"]
@@ -195,6 +213,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "37a53aa9d82665c1f7c10f4f62c0d664364389750a9ccb59cf7ae15d8058d8e6"
+  inputs-digest = "964b04a8796caeb9d9a5df81337f9e91cf329a2ff61d42eeee3f886b0f3fc63c"
   solver-name = "gps-cdcl"
   solver-version = 1

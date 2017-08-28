@@ -21,9 +21,6 @@
 #  version = "2.4.0"
 
 
-# [[constraint]]
-#   name = "github.com/smira/aptly"
-#   revision = "4cca7272cecb16106164d714a29ee7c73b43b5a9"
 [[override]]
   name = "github.com/smira/aptly"
   source = "https://github.com/skyscrapers/aptly.git"
@@ -32,3 +29,7 @@
 [[override]]
   name = "github.com/gin-gonic/gin"
   revision = "b1758d3bfa09e61ddbc1c9a627e936eec6a170de"
+
+[[constraint]]
+  name = "github.com/stretchr/testify"
+  version = "v1.1.4"
