@@ -19,7 +19,9 @@ package=$(jq -r '.source.package // ""' < "$payload")
 gpg_key_id=$(jq -r '.source.gpg_key_id // ""' < "$payload")
 version=$(jq -r '.version.ref // "latest"' < "$payload")
 
-if ! aptly mirror show "${package}-mirror" > /dev/null ; then
+aptly mirror show "${package}-mirror" > /dev/null
+rc=$?
+if [[ $rc != 0 ]] ; then
     gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv "${gpg_key_id}" 1>&- 2>&-
     aptly mirror create -filter="$package" -architectures="${architecture}" "${package}-mirror" "${repo_uri}" "${distribution}" "${component}" > /dev/null
 fi
