@@ -22,6 +22,7 @@ aptly mirror show "${package}-mirror" > /dev/null
 rc=$?
 if [[ $rc != 0 ]] ; then
     gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv "${gpg_key_id}" 1>&- 2>&-
+    gpg --no-default-keyring -a --export "${gpg_key_id}" | gpg --no-default-keyring --keyring ~/.gnupg/trustedkeys.gpg --import - 1>&- 2>&-
     aptly mirror create -filter="$package" -architectures="${architecture}" "${package}-mirror" "${repo_uri}" "${distribution}" "${component}" > /dev/null
 fi
 aptly mirror update "${package}-mirror" 1>&- 2>&-
