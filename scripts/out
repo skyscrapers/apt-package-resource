@@ -1,3 +1,2 @@
 #!/bin/bash
-
-echo "`put` is not supported in this resource type."
+set -o pipefail
