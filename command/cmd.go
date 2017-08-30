@@ -28,7 +28,7 @@ package environment to new version.`,
 		Flag: *flag.NewFlagSet("apt-resource", flag.ExitOnError),
 		Subcommands: []*commander.Command{
 			makeCmdCheck(),
-			// makeCmdIn(),
+			makeCmdIn(),
 		},
 	}
 
