@@ -8,4 +8,4 @@ exec 1>&2 # redirect all output to stderr for logging
 payload=$(mktemp "$TMPDIR/apt-package-resource-request.XXXXXX")
 cat > "$payload" <&0
 
-echo "$payload" >&2
+cat "$payload" >&2
