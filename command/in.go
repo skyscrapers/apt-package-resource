@@ -61,33 +61,25 @@ func aptResourceIn(cmd *commander.Command, args []string) error {
 	}
 
 	result := q.Query(context.CollectionFactory().PackageCollection())
-	versions := make([]string, 0, 5)
-
+	if result.Len() > 1 {
+		return fmt.Errorf("Not expecting more than 1 package %s with exact version %s", packageName, packageVersion)
+	}
 	err = result.ForEach(func(p *deb.Package) error {
-		versions = append(versions, p.Version)
+		printInJSON(packageVersion, p)
 		return nil
 	})
-	if err != nil {
-		return fmt.Errorf("unable to show: %s", err)
-	}
-
-	printInJSON(packageVersion, nil)
-
 	return err
 }
 
 // printInJson prints the list of versions in a format Concourse expects as output
 // http://concourse.ci/implementing-resources.html#in
-func printInJSON(version string, metadata []string) {
+func printInJSON(version string, packageInfo *deb.Package) {
 	fmt.Println("{")
 	fmt.Printf("  \"version\": { \"ref\": %s },\n", version)
-	// for i, version := range versions {
-	// 	fmt.Printf("  { \"ref\": \"%s\" }", version)
-	// 	if i+1 < len(versions) {
-	// 		fmt.Print(",")
-	// 	}
-	// 	fmt.Println()
-	// }
+	fmt.Printf("  \"metadata\": [\n")
+	fmt.Printf("    { \"name\": \"name\", \"value\": \"%s\" },\n", packageInfo.Name)
+	fmt.Printf("    { \"name\": \"version\", \"value\": \"%s\" },\n", packageInfo.Version)
+	fmt.Println("  ]")
 	fmt.Println("}")
 }
 
