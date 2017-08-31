@@ -9,6 +9,9 @@ exec 1>&2 # redirect all output to stderr for logging
 payload=$(mktemp "$TMPDIR/apt-package-resource-request.XXXXXX")
 cat > "$payload" <&0
 
+cat "$payload" >&2
+echo "" >&2
+
 # Parse parameters
 repo_uri=$(jq -r '.source.repo_uri // ""' < "$payload")
 component=$(jq -r '.source.component // "main"' < "$payload")
@@ -18,12 +21,16 @@ package=$(jq -r '.source.package // ""' < "$payload")
 gpg_key_id=$(jq -r '.source.gpg_key_id // ""' < "$payload")
 version=$(jq -r '.version.ref // "latest"' < "$payload")
 
-aptly mirror show "${package}-mirror" > /dev/null
+echo "Aptly Mirror Show" >&2
+aptly mirror show "${package}-mirror" >&2
 rc=$?
 if [[ $rc != 0 ]] ; then
-    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv "${gpg_key_id}" 1>&- 2>&-
-    gpg -a --export "${gpg_key_id}" | gpg --keyring ~/.gnupg/trustedkeys.gpg --import - 1>&- 2>&-
-    aptly mirror create -filter="$package" -architectures="${architecture}" "${package}-mirror" "${repo_uri}" "${distribution}" "${component}" > /dev/null
+    echo "Receive & Import GPG Key" >&2
+    gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "${gpg_key_id}" >&2
+    echo "Aptly Mirror Create" >&2
+    aptly mirror create -filter="$package" -architectures="${architecture}" "${package}-mirror" "${repo_uri}" "${distribution}" "${component}" >&2
 fi
-aptly mirror update "${package}-mirror" 1>&- 2>&-
+echo "Aptly Mirror Update" >&2
+aptly mirror update "${package}-mirror" >&2
+echo "apt-package-resource check" >&2
 /opt/resource/apt-package-resource check "${package}" "${version}" >&3
