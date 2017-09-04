@@ -52,7 +52,7 @@ func aptResourceIn(cmd *commander.Command, args []string) error {
 
 	packageName := args[0]
 	packageVersion := args[1]
-	resourcePath := args[2]
+	// resourcePath := args[2]
 
 	packageQuery := fmt.Sprintf("%v (= %s)", packageName, packageVersion)
 	q, err := query.Parse(packageQuery)
@@ -66,17 +66,9 @@ func aptResourceIn(cmd *commander.Command, args []string) error {
 	}
 	err = result.ForEach(func(p *deb.Package) error {
 		printInJSON(packageVersion, p)
-		copyPackageToResourcePath(p, resourcePath)
 		return nil
 	})
 	return err
-}
-
-func copyPackageToResourcePath(packageInfo *deb.Package, resourcePath string) {
-	packageFiles := packageInfo.Files()
-	for _, file := range packageFiles {
-		file.GetPoolPath(cli.GetContext().CollectionFactory().PackageCollection())
-	}
 }
 
 // printInJson prints the list of versions in a format Concourse expects as output
