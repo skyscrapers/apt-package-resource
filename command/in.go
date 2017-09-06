@@ -78,7 +78,7 @@ func aptResourceIn(cmd *commander.Command, args []string) error {
 	wf := bufio.NewWriter(f)
 	ws := bufio.NewWriter(os.Stdout)
 	err = result.ForEach(func(p *deb.Package) error {
-		err := printInJSON(packageVersion, p, wf)
+		err = printInJSON(packageVersion, p, wf)
 		if err != nil {
 			return fmt.Errorf("Unable to write to file '%s': %s", metadataFile, err)
 		}
