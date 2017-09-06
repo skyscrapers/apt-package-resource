@@ -1,7 +1,9 @@
 package command
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 
 	cli "github.com/smira/aptly/cmd"
 	"github.com/smira/aptly/deb"
@@ -52,20 +54,39 @@ func aptResourceIn(cmd *commander.Command, args []string) error {
 
 	packageName := args[0]
 	packageVersion := args[1]
-	// resourcePath := args[2]
+	resourcePath := args[2]
 
 	packageQuery := fmt.Sprintf("%v (= %s)", packageName, packageVersion)
 	q, err := query.Parse(packageQuery)
 	if err != nil {
-		return fmt.Errorf("unable to create package query '%s': %s", packageQuery, err)
+		return fmt.Errorf("Unable to create package query '%s': %s", packageQuery, err)
 	}
 
 	result := q.Query(context.CollectionFactory().PackageCollection())
-	if result.Len() > 1 {
-		return fmt.Errorf("Not expecting more than 1 package %s with exact version %s", packageName, packageVersion)
+	if result.Len() != 1 {
+		return fmt.Errorf("Expecting just 1 package (%s) matching version %s, but got %d", packageName, packageVersion, result.Len())
 	}
+
+	metadataFile := fmt.Sprintf("%s/metadata", resourcePath)
+	f, err := os.Create(metadataFile)
+	if err != nil {
+		return fmt.Errorf("Unable to open file '%s': %s", metadataFile, err)
+	}
+
+	defer f.Close()
+
+	wf := bufio.NewWriter(f)
+	ws := bufio.NewWriter(os.Stdout)
 	err = result.ForEach(func(p *deb.Package) error {
-		printInJSON(packageVersion, p)
+		err := printInJSON(packageVersion, p, wf)
+		if err != nil {
+			return fmt.Errorf("Unable to write to file '%s': %s", metadataFile, err)
+		}
+
+		err = printInJSON(packageVersion, p, ws)
+		if err != nil {
+			return fmt.Errorf("Unable to write to stdout: %s", err)
+		}
 		return nil
 	})
 	return err
@@ -73,15 +94,21 @@ func aptResourceIn(cmd *commander.Command, args []string) error {
 
 // printInJson prints the list of versions in a format Concourse expects as output
 // http://concourse.ci/implementing-resources.html#in
-func printInJSON(version string, packageInfo *deb.Package) {
-	fmt.Println("{")
-	fmt.Printf("  \"version\": { \"ref\": \"%s\" },\n", version)
-	fmt.Printf("  \"metadata\": [\n")
-	fmt.Printf("    { \"name\": \"name\", \"value\": \"%s\" },\n", packageInfo.Name)
-	fmt.Printf("    { \"name\": \"version\", \"value\": \"%s\" },\n", packageInfo.Version)
-	fmt.Printf("    { \"name\": \"architecture\", \"value\": \"%s\" }\n", packageInfo.Architecture)
-	fmt.Println("  ]")
-	fmt.Println("}")
+func printInJSON(version string, packageInfo *deb.Package, w *bufio.Writer) error {
+	_, err := fmt.Fprintf(w, `{
+	"version": { "ref": "%s" },
+	"metadata": [
+		{ "name": "name", "value": "%s" },
+		{ "name": "version", "value": "%s" },
+		{ "name": "architecture", "value": "%s" }
+	]
+}`, version, packageInfo.Name, packageInfo.Version, packageInfo.Architecture)
+	if err != nil {
+		return err
+	}
+
+	w.Flush()
+	return nil
 }
 
 func makeCmdIn() *commander.Command {
