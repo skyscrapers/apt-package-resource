@@ -32,7 +32,7 @@ if [[ $rc != 0 ]] ; then
     if [ -n "$gpg_key_content" ]; then
       gpg_key_file=$(mktemp "$TMPDIR/apt-gpg-key-content.XXXXXX")
       echo "$gpg_key_content" > $gpg_key_file
-      gpg_options="$gpg_options add $gpg_key_file"
+      gpg_options="$gpg_options --import $gpg_key_file"
     else
       gpg_options="$gpg_options --keyserver \"${gpg_key_server}\" --recv-keys \"${gpg_key_id}\""
     fi
