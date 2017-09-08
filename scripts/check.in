@@ -4,7 +4,9 @@
     "distribution": "squeeze",
     "component": "main",
     "package": "aptly",
-    "gpg_key_id": "9E3E53F19C7DE460"
+    "gpg_key_id": "9E3E53F19C7DE460",
+    "gpg_key_server": "",
+    "gpg_key_content": ""
   },
   "version": { "ref": "0.9.1" }
 }

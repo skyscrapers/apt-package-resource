@@ -23,7 +23,7 @@
 
 [[override]]
   name = "github.com/smira/aptly"
-  source = "https://github.com/skyscrapers/aptly.git"
+  source = "github.com/skyscrapers/aptly"
   branch = "expose-context"
 
 [[override]]

@@ -125,7 +125,7 @@
   name = "github.com/smira/aptly"
   packages = ["api","aptly","cmd","console","context","database","deb","files","http","pgp","query","s3","swift","systemd/activation","utils"]
   revision = "82342cfe21bba66eb015e8d352684d2576b62bee"
-  source = "https://github.com/skyscrapers/aptly.git"
+  source = "github.com/skyscrapers/aptly"
 
 [[projects]]
   branch = "master"
